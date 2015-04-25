@@ -1,0 +1,694 @@
+{
+  "id": 1,
+  "title": "Wahl Network Lab",
+  "originalTitle": "Wahl Network Lab",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": true,
+  "sharedCrosshair": true,
+  "rows": [
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+            "esx1 cpu": "#7EB26D",
+            "esx1 ram": "#9AC48A",
+            "esx2 cpu": "#EAB839",
+            "esx2 ram": "#7EB26D",
+            "esx3 cpu": "#6ED0E0",
+            "esx3 ram": "#3F6833",
+            "esxd1 ram": "#B7DBAB"
+          },
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 2,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": 0,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 5,
+          "interval": "",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/esxd[0-9]/",
+              "stack": false
+            }
+          ],
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$0 ram",
+              "column": "RAM",
+              "function": "sum",
+              "interval": "",
+              "query": "select sum(RAM) from /esx[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esx[0-9].glacier.local/"
+            },
+            {
+              "alias": "$0 ram",
+              "column": "RAM",
+              "function": "sum",
+              "interval": "",
+              "query": "select sum(RAM) from /esxd[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esxd[0-9].glacier.local/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Memory Utilization (Stacked)",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "leftLogBase": 10,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 9,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/sql[0-9] total mem/",
+              "fill": 2,
+              "zindex": -3
+            },
+            {
+              "alias": "sql1 total mem",
+              "yaxis": 2
+            },
+            {
+              "alias": "sql1 page life",
+              "yaxis": 1
+            },
+            {
+              "alias": "/sql[0-9] users/",
+              "linewidth": 1
+            },
+            {
+              "alias": "sql1 batch reqs",
+              "fill": 5
+            }
+          ],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$1 buffer cache hit",
+              "column": "buffer_cache_hit",
+              "function": "last",
+              "query": "select last(buffer_cache_hit) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 page life",
+              "column": "page_life_exp",
+              "function": "last",
+              "query": "select last(page_life_exp) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 users",
+              "column": "user_conns",
+              "function": "last",
+              "query": "select last(user_conns) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 batch reqs",
+              "column": "batch_reqs",
+              "function": "last",
+              "query": "select last(batch_reqs) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 total mem",
+              "column": "total_memory",
+              "function": "last",
+              "query": "select last(total_memory) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SQL Performance Counters",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "kbytes"
+          ]
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+            "esx1 cpu": "#BF1B00",
+            "esx2 cpu": "#EF843C",
+            "esx3 cpu": "#E5AC0E",
+            "esxd1 cpu": "#F2C96D"
+          },
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": 0,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 6,
+          "interval": "",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/esxd[0-9]/",
+              "stack": false
+            }
+          ],
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$0 cpu",
+              "column": "CPU",
+              "function": "mean",
+              "interval": "",
+              "query": "select mean(CPU) from /esx[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esx[0-9].glacier.local/"
+            },
+            {
+              "alias": "$0 cpu",
+              "column": "CPU",
+              "function": "mean",
+              "interval": "",
+              "query": "select mean(CPU) from /esxd[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esxd[0-9].glacier.local/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "CPU Utilization (Stacked)",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 8,
+          "interval": "",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$1 sys",
+              "column": "sys_transfer",
+              "function": "last",
+              "query": "select last(sys_transfer) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 db",
+              "column": "db_transfer",
+              "function": "last",
+              "query": "select last(db_transfer) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            },
+            {
+              "alias": "$1 log",
+              "column": "log_transfer",
+              "function": "last",
+              "groupby_field": "",
+              "query": "select last(log_transfer) from /sql_stats.sql[0-9]/ where $timeFilter group by time($interval) order asc",
+              "series": "/sql_stats.sql[0-9]/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SQL Disk Transfer Counters",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "mbytes",
+            "short"
+          ]
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+            "esx1 ready": "#6ED0E0",
+            "esx2 ready": "#806EB7",
+            "esx3 ready": "#BA43A9",
+            "esx3-cpu": "#7EB26D",
+            "esx3-ram": "#0A437C",
+            "esx3-ready": "#EAB839",
+            "esxd1 ready": "#1F78C1"
+          },
+          "bars": false,
+          "datasource": null,
+          "decimals": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 208, 27, 0.08)",
+            "threshold2": null,
+            "threshold2Color": "rgba(255, 0, 0, 0.07)",
+            "thresholdLine": false
+          },
+          "height": "",
+          "hideTimeOverride": false,
+          "id": 1,
+          "interval": "",
+          "leftYAxisLabel": "",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 3,
+          "points": false,
+          "renderer": "flot",
+          "rightYAxisLabel": "",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$0 ready",
+              "column": "RDY",
+              "function": "mean",
+              "groupby_field": "",
+              "interval": "",
+              "query": "select mean(RDY) from /esx[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esx[0-9].glacier.local/"
+            },
+            {
+              "alias": "$0 ready",
+              "column": "RDY",
+              "function": "mean",
+              "groupby_field": "",
+              "interval": "",
+              "query": "select mean(RDY) from /esxd[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/esxd[0-9].glacier.local/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "CPU Ready",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "transparent": false,
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ]
+        },
+        {
+          "aliasColors": {
+            "veeam1 Freespace": "#1F78C1",
+            "veeam1 Lab": "#E0752D",
+            "veeam1 Mgmt": "#EAB839"
+          },
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 10,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 10,
+          "interval": "900s",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "veeam1 Freespace",
+              "fill": 1,
+              "points": false,
+              "stack": false,
+              "yaxis": 2,
+              "zindex": -3
+            }
+          ],
+          "span": 5,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$1 Lab",
+              "column": "Lab",
+              "fill": "",
+              "function": "last",
+              "query": "select last(Lab) from /veeam_backup.veeam[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/veeam_backup.veeam[0-9].glacier.local/"
+            },
+            {
+              "alias": "$1 Mgmt",
+              "column": "Management",
+              "fill": "",
+              "function": "last",
+              "query": "select last(Management) from /veeam_backup.veeam[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/veeam_backup.veeam[0-9].glacier.local/"
+            },
+            {
+              "alias": "$1 Freespace",
+              "column": "Freespace",
+              "fill": "",
+              "function": "last",
+              "query": "select last(Freespace) from /veeam_backup.veeam[0-9].glacier.local/ where $timeFilter group by time($interval) order asc",
+              "series": "/veeam_backup.veeam[0-9].glacier.local/"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Veeam Backup Repository",
+          "tooltip": {
+            "shared": true,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "mbytes",
+            "mbytes"
+          ]
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(50, 172, 45, 0.97)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(245, 54, 54, 0.9)"
+          ],
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "height": "",
+          "id": 7,
+          "interval": "15s",
+          "links": [],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "span": 1,
+          "sparkline": {
+            "fillColor": "rgb(7, 64, 26)",
+            "full": false,
+            "lineColor": "rgb(32, 255, 0)",
+            "show": true
+          },
+          "targets": [
+            {
+              "alias": "Powered On",
+              "column": "On",
+              "function": "last",
+              "query": "select last(On) from \"vm_state\" where $timeFilter group by time($interval) order asc",
+              "series": "vm_state"
+            }
+          ],
+          "thresholds": "",
+          "title": "VMs (On)",
+          "type": "singlestat",
+          "valueFontSize": "150%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
+        }
+      ],
+      "title": "New row"
+    }
+  ],
+  "nav": [
+    {
+      "collapse": false,
+      "enable": true,
+      "notice": false,
+      "now": true,
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "status": "Stable",
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "2h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ],
+      "type": "timepicker"
+    }
+  ],
+  "time": {
+    "from": "now-2d",
+    "now": true,
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "refresh": "30s",
+  "schemaVersion": 6,
+  "version": 30
+}
